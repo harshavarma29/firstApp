@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: harshavarma29/firstApp-clone
+  repository: harshavarma29/first-app-clone
   tag: "latest"
   pullPolicy: IfNotPresent
 

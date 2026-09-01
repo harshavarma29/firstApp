@@ -7,7 +7,7 @@ tasks:
 
   docker-build:
     desc: Build local Docker image
-    cmd: docker build -t harshavarma29/firstApp-clone:latest
+    cmd: docker build -t harshavarma29/first-app-clone:latest
 
   helm-lint:
     desc: Verify Helm char syntax

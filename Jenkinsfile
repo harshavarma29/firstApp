@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "harshavarma29/firstApp-clone"
+        DOCKER_IMAGE = "harshavarma29/first-app-clone"
         IMAGE_TAG = "v${BUILD_NUMBER}"
     }
 
