@@ -1,0 +1,21 @@
+project: push-api-clone
+
+tasks:
+  build:
+    desc: Build Spring Boot JAR file
+    cmd: ./gradlew build -x test
+
+  docker-build:
+    desc: Build local Docker image
+    cmd: docker build -t harshavarma29/firstApp-clone:latest
+
+  helm-lint:
+    desc: Verify Helm char syntax
+    cmd: Helm upgrade --install my-app chart/
+
+  all:
+    desc: Run build, containerize, and test linting
+    cmd:
+      - myke build
+      - myke docker-build
+      - myke helm-lint

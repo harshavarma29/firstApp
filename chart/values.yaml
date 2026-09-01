@@ -1,0 +1,11 @@
+replicaCount: 1
+
+image:
+  repository: harshavarma29/firstApp-clone
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 8080
+  targetPort: 8080
