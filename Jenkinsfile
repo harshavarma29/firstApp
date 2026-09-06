@@ -2,45 +2,49 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "harshavarma29/first-app-clone"
-        IMAGE_TAG = "v${BUILD_NUMBER}"
+        ACR_NAME = "firstappacr.azurecr.io"
+        IMAGE_NAME = "firstapp"
+        IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
     stages {
 
-        stage('Build JAR') {
+        stage('Checkout') {
             steps {
-                sh './gradlew clean build -x test'
+                checkout scm
             }
         }
 
-        stage('Build & Push Docker Image') {
+        stage('Build JAR file with Gradle') {
             steps {
-                script {
-                    sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG}"
+                sh './gradlew clean build'
+            }
+        }
 
-                    withCredentials([usernamePassword(
-                            credentialsId: 'dockerhub-credentials',
-                            usernameVariable: 'USER',
-                            passwordVariable: 'PWD'
-                        )]) {
-                        sh "docker login -u ${USER} -p ${PWD}"
-                        sh "docker push ${DOCKER_IMAGE}:${IMAGE_TAG}"
-                    }
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${ACR_NAME}/${IMAGE_NAME}:${IMAGE_TAG} ."
+            }
+        }
+
+        stage('Push to ACR') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'firstapp-credentials-access-azure', usernameVariable: 'ACR_USER', passwordVariable: 'ACR_PASS')]) {
+                    sh "echo $ACR_PASS | docker login ${ACR_NAME} -u $ACR_USER --password-stdin"
+                    sh "docker push ${ACR_NAME}/${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
+
         }
 
-        stage('Update Helm Chart Tag') {
+        stage('Deploy to AKS') {
             steps {
-                script {
-                    sh "sed -i 's|tag: .*|tag: \"${IMAGE_TAG}\"|g' chart/values.yaml"
-
-                    git config user.name "harshavarma29"
-                    git config user.email "harshavarma29@gmail.com"
-                    git add chart/values.yaml
-                    git commit -m "ci: bump chart image tag to ${IMAGE_TAG}"
-                    git push https://\${GITHUB_TOKEN}@github.com/harshavarma29/firstApp.git HEAD:dev
+                withCredentials([file(credentialsId: 'aks-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh """
+                        sed -e 's|IMAGE_TAG_PLACEHOLDER|${IMAGE_TAG}|g' deployment.yaml > deployment-final.yaml
+                        kubectl apply -f deployment-final.yaml
+                        kubectl apply -f service.yaml
+                    """
                 }
             }
         }

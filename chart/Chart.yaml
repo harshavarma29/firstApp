@@ -1,5 +1,5 @@
 apiVersion: v2
-name: first-app-clone
+name: firstapp
 description: Understanding deployment part of the application
 type: application
 version: 0.1.1
