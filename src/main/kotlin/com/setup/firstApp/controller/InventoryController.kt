@@ -9,7 +9,7 @@ class InventoryController {
 
     @GetMapping("/get-outlet/{id}")
     fun getOutlet(@PathVariable("id") id: Int): ResponseEntity<String> {
-        return ResponseEntity.ok("No data found for Id, please retry: ${id}")
+        return ResponseEntity.ok("No data found for Id, please retry: ${id}. We will come to development after configuring ArgoCD")
     }
 
 }
