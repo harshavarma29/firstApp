@@ -95,7 +95,7 @@ pipeline {
         stage('Update Manifest for ArgoCD') {
             steps {
                 container('git') {
-                    withCredentials([usernamePassword(credentialsId: 'github-push-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    withCredentials([usernamePassword(credentialsId: 'github-push-image-access', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh """
                             git config --global user.email "jenkins@firstapp.local"
                             git config --global user.name "Jenkins CI"
