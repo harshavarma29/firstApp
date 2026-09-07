@@ -9,7 +9,7 @@ class InventoryController {
 
     @GetMapping("/get-outlet/{id}")
     fun getOutlet(@PathVariable("id") id: Int): ResponseEntity<String> {
-        return ResponseEntity.ok("No data available for Id: ${id}")
+        return ResponseEntity.ok("No data found for Id: ${id}")
     }
 
 }
