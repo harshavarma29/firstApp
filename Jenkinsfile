@@ -9,11 +9,37 @@ pipeline {
                   - name: jnlp
                     resources:
                       requests:
+                        memory: "1Gi"
+                        cpu: "500m"
+                      limits:
+                        memory: "1Gi"
+                        cpu: "1"
+                  - name: jdk
+                    image: eclipse-temurin:17-jdk
+                    command: ["cat"]
+                    tty: true
+                    resources:
+                      requests:
                         memory: "2Gi"
                         cpu: "1"
                       limits:
                         memory: "3Gi"
                         cpu: "2"
+                  - name: kaniko
+                    image: gcr.io/kaniko-project/executor:debug
+                    command: ["sleep"]
+                    args: ["9999999"]
+                    resources:
+                      requests:
+                        memory: "1Gi"
+                        cpu: "500m"
+                      limits:
+                        memory: "2Gi"
+                        cpu: "1"
+                  - name: kubectl
+                    image: bitnami/kubectl:latest
+                    command: ["sleep"]
+                    args: ["9999999"]
             '''
         }
     }
