@@ -1,5 +1,22 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            yaml '''
+                apiVersion: v1
+                kind: Pod
+                spec:
+                  containers:
+                  - name: jnlp
+                    resources:
+                      requests:
+                        memory: "2Gi"
+                        cpu: "1"
+                      limits:
+                        memory: "3Gi"
+                        cpu: "2"
+            '''
+        }
+    }
 
     environment {
         ACR_NAME = "firstappacr.azurecr.io"
