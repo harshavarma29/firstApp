@@ -97,9 +97,9 @@ pipeline {
                 container('kubectl') {
                     withCredentials([file(credentialsId: 'aks-kubeconfig', variable: 'KUBECONFIG')]) {
                         sh """
-                            sed -e 's|IMAGE_TAG_PLACEHOLDER|${IMAGE_TAG}|g' deployment.yaml > deployment-final.yaml
-                            kubectl apply -f deployment-final.yaml
-                            kubectl apply -f service.yaml
+                            sed -e 's|IMAGE_TAG_PLACEHOLDER|${IMAGE_TAG}|g' k8s/deployment.yaml > k8s/deployment-final.yaml
+                            kubectl apply -f k8s/deployment-final.yaml
+                            kubectl apply -f k8s/service.yaml
                         """
                     }
                 }
