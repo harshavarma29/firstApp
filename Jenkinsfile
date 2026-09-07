@@ -37,7 +37,7 @@ pipeline {
                         memory: "2Gi"
                         cpu: "1"
                   - name: kubectl
-                    image: bitnami/kubectl:latest
+                    image: alpine/k8s:1.28.9
                     command: ["sleep"]
                     args: ["9999999"]
                     resources:
