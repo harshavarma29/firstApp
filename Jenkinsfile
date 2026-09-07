@@ -67,8 +67,12 @@ pipeline {
 
         stage('Build JAR file with Gradle') {
             steps {
-                sh 'chmod +x gradlew'
-                sh './gradlew clean build'
+                container('jdk') {
+                    sh 'echo "Running in container:" && hostname'
+                    sh 'which java && java -version'
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean build --no-daemon'
+                }
             }
         }
 
