@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: firstapp
-          image: firstappacr.azurecr.io/firstapp:4
+          image: firstappacr.azurecr.io/firstapp:5
           ports:
             - containerPort: 7000
       imagePullSecrets:
