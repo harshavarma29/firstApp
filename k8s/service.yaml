@@ -9,4 +9,4 @@ spec:
     app: firstapp
   ports:
     - port: 80
-      targetPort: 8080
+      targetPort: 7000

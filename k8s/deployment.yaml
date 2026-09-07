@@ -17,6 +17,6 @@ spec:
         - name: firstapp
           image: firstappacr.azurecr.io/firstapp:IMAGE_TAG_PLACEHOLDER
           ports:
-            - containerPort: 8080
+            - containerPort: 7000
       imagePullSecrets:
         - name: acr-secret
