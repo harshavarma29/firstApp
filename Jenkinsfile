@@ -62,6 +62,13 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                script {
+                    def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    if (lastCommitMessage.startsWith('Update firstapp image to tag')) {
+                        currentBuild.result = 'ABORTED'
+                        error('Skipping build: this commit was made by Jenkins itself, not a real code change.')
+                    }
+                }
             }
         }
 
