@@ -36,8 +36,8 @@ pipeline {
                       limits:
                         memory: "2Gi"
                         cpu: "1"
-                  - name: kubectl
-                    image: alpine/k8s:1.28.9
+                  - name: git
+                    image: alpine/git:latest
                     command: ["sleep"]
                     args: ["9999999"]
                     resources:
@@ -92,14 +92,18 @@ pipeline {
             }
         }
 
-        stage('Deploy to AKS') {
+        stage('Update Manifest for ArgoCD') {
             steps {
-                container('kubectl') {
-                    withCredentials([file(credentialsId: 'aks-kubeconfig', variable: 'KUBECONFIG')]) {
+                container('git') {
+                    withCredentials([usernamePassword(credentialsId: 'github-push-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh """
-                            sed -e 's|IMAGE_TAG_PLACEHOLDER|${IMAGE_TAG}|g' k8s/deployment.yaml > k8s/deployment-final.yaml
-                            kubectl apply -f k8s/deployment-final.yaml
-                            kubectl apply -f k8s/service.yaml
+                            git config --global user.email "jenkins@firstapp.local"
+                            git config --global user.name "Jenkins CI"
+                            git config --global --add safe.directory '*'
+                            sed -i 's|${ACR_NAME}/${IMAGE_NAME}:.*|${ACR_NAME}/${IMAGE_NAME}:${IMAGE_TAG}|g' k8s/deployment.yaml
+                            git add k8s/deployment.yaml
+                            git commit -m "Update firstapp image to tag ${IMAGE_TAG}" || echo "No changes to commit"
+                            git push https://\$GIT_USER:\$GIT_TOKEN@github.com/harshavarma29/firstApp.git HEAD:dev-argocd
                         """
                     }
                 }
