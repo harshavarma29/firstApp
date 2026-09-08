@@ -18,5 +18,16 @@ spec:
           image: firstappacr.azurecr.io/firstapp:7
           ports:
             - containerPort: 7000
+          env:
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_INITDB_ROOT_PASSWORD
       imagePullSecrets:
         - name: acr-secret
