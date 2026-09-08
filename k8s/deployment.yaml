@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: firstapp
-          image: firstappacr.azurecr.io/firstapp:13
+          image: firstappacr.azurecr.io/firstapp:15
           ports:
             - containerPort: 7000
           env:
