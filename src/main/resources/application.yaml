@@ -3,7 +3,12 @@ spring:
     name: firstApp
   data:
     mongodb:
-      uri: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb.firstapp.svc.cluster.local:27017/firstapp_db?authSource=admin
+      host: mongodb.firstapp.svc.cluster.local
+      port: 27017
+      username: ${MONGO_USER}
+      password: ${MONGO_PASSWORD}
+      database: firstapp_db
+      authentication-database: admin
 
 server:
   port: 7000
